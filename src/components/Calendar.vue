@@ -7,13 +7,15 @@
     </div>
 
     <div id="calendar">
-      <div class="day-name" v-for="dayName in dayNames" :key="dayName">{{ dayName }}</div>
+      <div class="day-name" v-for="dayName in dayNames" :key="dayName">
+        {{ dayName }}
+      </div>
       <div
-          v-for="day in allDays"
-          :key="day.key"
-          class="day"
-          :class="{ 'outside-month': day.isOutside }"
-          @click="selectDay(day)"
+        v-for="day in allDays"
+        :key="day.key"
+        class="day"
+        :class="{ 'outside-month': day.isOutside }"
+        @click="selectDay(day)"
       >
         {{ day.date }}
       </div>
@@ -27,9 +29,22 @@ export default {
     return {
       currentMonth: new Date().getMonth(),
       currentYear: new Date().getFullYear(),
-      monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+      monthNames: [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ],
       dayNames: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-      allDays: []
+      allDays: [],
     };
   },
   mounted() {
@@ -58,9 +73,21 @@ export default {
     generateDays() {
       const days = [];
 
-      const firstDayOfMonth = new Date(this.currentYear, this.currentMonth, 1).getDay();
-      const daysInPreviousMonth = new Date(this.currentYear, this.currentMonth, 0).getDate();
-      const daysInMonth = new Date(this.currentYear, this.currentMonth + 1, 0).getDate();
+      const firstDayOfMonth = new Date(
+        this.currentYear,
+        this.currentMonth,
+        1
+      ).getDay();
+      const daysInPreviousMonth = new Date(
+        this.currentYear,
+        this.currentMonth,
+        0
+      ).getDate();
+      const daysInMonth = new Date(
+        this.currentYear,
+        this.currentMonth + 1,
+        0
+      ).getDate();
 
       let prevMonth = this.currentMonth - 1;
       let prevYear = this.currentYear;
@@ -68,12 +95,28 @@ export default {
         prevMonth = 11;
         prevYear--;
       }
-      for (let i = daysInPreviousMonth - firstDayOfMonth + 1; i <= daysInPreviousMonth; i++) {
-        days.push({ date: i, month: prevMonth, year: prevYear, isOutside: true, key: `${prevYear}-${prevMonth}-${i}` });
+      for (
+        let i = daysInPreviousMonth - firstDayOfMonth + 1;
+        i <= daysInPreviousMonth;
+        i++
+      ) {
+        days.push({
+          date: i,
+          month: prevMonth,
+          year: prevYear,
+          isOutside: true,
+          key: `${prevYear}-${prevMonth}-${i}`,
+        });
       }
 
       for (let i = 1; i <= daysInMonth; i++) {
-        days.push({ date: i, month: this.currentMonth, year: this.currentYear, isOutside: false, key: `${this.currentYear}-${this.currentMonth}-${i}` });
+        days.push({
+          date: i,
+          month: this.currentMonth,
+          year: this.currentYear,
+          isOutside: false,
+          key: `${this.currentYear}-${this.currentMonth}-${i}`,
+        });
       }
 
       let nextMonth = this.currentMonth + 1;
@@ -82,13 +125,24 @@ export default {
         nextMonth = 0;
         nextYear++;
       }
-      for (let i = 1; i <= 7 - (firstDayOfMonth + daysInMonth) % 7 && (firstDayOfMonth + daysInMonth) % 7 !== 0; i++) {
-        days.push({ date: i, month: nextMonth, year: nextYear, isOutside: true, key: `${nextYear}-${nextMonth}-${i}` });
+      for (
+        let i = 1;
+        i <= 7 - ((firstDayOfMonth + daysInMonth) % 7) &&
+        (firstDayOfMonth + daysInMonth) % 7 !== 0;
+        i++
+      ) {
+        days.push({
+          date: i,
+          month: nextMonth,
+          year: nextYear,
+          isOutside: true,
+          key: `${nextYear}-${nextMonth}-${i}`,
+        });
       }
 
       this.allDays = days;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -111,12 +165,17 @@ export default {
   transition: background-color 0.3s;
 }
 
+.birthday {
+  background-color: yellow;
+}
+
 .day:hover {
   background-color: #e9e9e9;
 }
 
 .outside-month {
-  background-color: hsl(0, 0%, 86%);
+  background-color: rgba(0, 0, 0, 0.1);
+  opacity: 0.5;
 }
 
 #calendar-header {

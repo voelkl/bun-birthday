@@ -1,5 +1,5 @@
 import { Elysia, t } from "elysia";
-import { EventsDatabase } from "./db.ts";
+import { EventsDatabase } from "./db.js";
 import { html } from '@elysiajs/html'
 import { cors } from '@elysiajs/cors'
 

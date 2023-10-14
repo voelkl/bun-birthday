@@ -28,7 +28,6 @@
     </div>
   </div>
 </template>
-
 <script>
 export default {
   name: "Modal",
@@ -66,8 +65,8 @@ export default {
       this.$refs.modal?.classList.remove("is-active");
     },
     fetchEvents() {
-      this.$emit("fetchEvents")
-    }
+      this.$emit("fetchEvents");
+    },
   },
 };
 </script>

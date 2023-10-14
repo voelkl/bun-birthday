@@ -8,31 +8,35 @@
       <div class="columns">
         <div class="column">
           <modal modal_id="add_event_modal" modal_name="Add Birthday Event">
-            <add-event-form
-              @fetchEvents="fetchEvents"
-            />
+            <add-event-form @fetchEvents="fetchEvents" />
           </modal>
-          <calendar
-            :events="events"
-          />
+          <calendar :events="events" />
         </div>
         <div class="column">
-          <sort-events-dropdown />
-          <events-list
-              :events="events"
-              @fetchEvents="fetchEvents"
+          <sort-events-dropdown
+            :events="events"
+            @sortEvents="sortEvents"
+            @setSortType="setSortType"
           />
+          <sort-direction-dropdown
+            v-show="sortType !== 'UPCOMING'"
+            :events="events"
+            @setSortDirection="setSortDirection"
+            @sortEvents="sortEvents"
+          />
+          <events-list :events="events" @fetchEvents="fetchEvents" />
         </div>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts">
-import Modal from "./components/Modal.vue"
-import AddEventForm from "./components/AddEventForm.vue"
+import Modal from "./components/Modal.vue";
+import AddEventForm from "./components/AddEventForm.vue";
 import EventsList from "./components/EventsList.vue";
 import Calendar from "./components/Calendar.vue";
 import SortEventsDropdown from "./components/SortEventsDropdown.vue";
+import SortDirectionDropdown from "./components/SortDirectionDropdown.vue";
 
 interface Window {
   jsCalendar: any;
@@ -46,6 +50,8 @@ type BirthdayEvent = {
   date: string;
 };
 
+type BirthdayEvents = BirthdayEvent[];
+
 export default {
   name: "App",
   components: {
@@ -53,39 +59,108 @@ export default {
     Calendar,
     EventsList,
     Modal,
-    AddEventForm
+    AddEventForm,
+    SortDirectionDropdown,
   },
   data() {
     return {
-      events: [] as Array
-    }
+      events: [],
+      sortDirection: "DESC",
+      sortType: "UPCOMING",
+    };
   },
   mounted() {
-    this.fetchEvents()
+    this.fetchEvents();
   },
   methods: {
-    fetchEvents() {
+    fetchEvents(): void {
       fetch("http://localhost:3000/events", {
         method: "GET",
         headers: {
           "Access-Control-Allow-Origin": "*",
         },
       })
-          .then((res) => res.json())
-          .then((events) => {
-            this.events = events
-          })
-          .catch((error) => {
-            console.log(error)
-          })
+        .then((res) => res.json())
+        .then((events) => {
+          this.events = events;
+          this.sortEvents();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
-  }
+    isBirthdayUpcoming(eventDateString: string) {
+      const eventDate = new Date(eventDateString);
+      const currentDate = new Date();
+      if (eventDate.getMonth() > currentDate.getMonth()) {
+        return true;
+      }
+      if (
+        eventDate.getMonth() === currentDate.getMonth() &&
+        eventDate.getDate() >= currentDate.getDate()
+      ) {
+        return true;
+      }
+      return false;
+    },
+    sortEvents(): void {
+      const now = new Date().getTime();
 
-}
+      if (this.sortType == "DATE" && this.sortDirection == "ASC") {
+        this.events.sort((a, b) => {
+          return new Date(a.date).getTime() - new Date(b.date).getTime();
+        });
+      } else if (this.sortType == "DATE" && this.sortDirection == "DESC") {
+        this.events.sort((a, b) => {
+          return new Date(b.date).getTime() - new Date(a.date).getTime();
+        });
+      } else if (this.sortType == "NAME" && this.sortDirection == "ASC") {
+        this.events.sort((a, b) => {
+          return a.title.localeCompare(b.title);
+        });
+      } else if (this.sortType == "NAME" && this.sortDirection == "DESC") {
+        this.events.sort((a, b) => {
+          return b.title.localeCompare(a.title);
+        });
+      } else if (this.sortType == "UPCOMING") {
+        this.events.sort((a, b) => {
+          const aDate = new Date(a.date);
+          const bDate = new Date(b.date);
+
+          const aUpcoming = this.isBirthdayUpcoming(a.date);
+          const bUpcoming = this.isBirthdayUpcoming(b.date);
+
+          // If both are upcoming or both are past, sort by their date
+          if ((aUpcoming && bUpcoming) || (!aUpcoming && !bUpcoming)) {
+            if (aDate.getMonth() === bDate.getMonth()) {
+              return aDate.getDate() - bDate.getDate();
+            }
+            return aDate.getMonth() - bDate.getMonth();
+          }
+
+          // If one is upcoming and the other is past, the upcoming one should come first
+          if (aUpcoming) {
+            return -1;
+          }
+          if (bUpcoming) {
+            return 1;
+          }
+        });
+      }
+    },
+
+    setSortDirection(direction) {
+      this.sortDirection = direction;
+    },
+    setSortType(type) {
+      this.sortType = type;
+    },
+  },
+};
 </script>
 
 <style>
-  .card-content .content {
-    text-align: left;
-  }
+.card-content .content {
+  text-align: left;
+}
 </style>

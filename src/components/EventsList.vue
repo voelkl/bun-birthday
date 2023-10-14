@@ -6,32 +6,22 @@
           <p class="card-header-title">
             {{ event.title }}
           </p>
-          <modal
-            modal_id="edit_event_modal"
-            modal_name="Edit Event"
-          >
-            <edit-event-form
-              :event_props="event"
-            />
+          <modal modal_id="edit_event_modal" modal_name="Edit Event">
+            <edit-event-form :event_props="event" />
           </modal>
-          <modal
-              modal_id="delete_event_modal"
-              modal_name="Delete Event"
-          >
+          <modal modal_id="delete_event_modal" modal_name="Delete Event">
             <div>
-              <p>
-                Are you sure you want to delete this event?
-              </p>
-              <button class="button" @click="deleteEvent(event)">Yes, Delete it!</button>
+              <p>Are you sure you want to delete this event?</p>
+              <button class="button" @click="deleteEvent(event)">
+                Yes, Delete it!
+              </button>
             </div>
           </modal>
         </header>
         <div class="card-content">
           <div class="content">
-            <p>Alter: {{ getAge(event.date) }}</p>
-            <p id="birth-date-${event.id}">
-              Date: {{ event.date }}
-            </p>
+            <p>Alter: {{ calculateAge(event.date) }}</p>
+            <p id="birth-date-${event.id}">Date: {{ event.date }}</p>
             <p id="birthday-ideas-${event.id}">
               Details: {{ event.description }}
             </p>
@@ -54,7 +44,7 @@ type BirthdayEvent = {
 export default {
   components: {
     Modal,
-    EditEventForm
+    EditEventForm,
   },
   name: "EventsList",
   props: {
@@ -68,24 +58,36 @@ export default {
           "Access-Control-Allow-Origin": "*",
         },
       })
-          .then((res) => res.json())
-          .then((res) => {
-            if (res.success) {
-              (document.querySelectorAll('.modal') || []).forEach((modal) => {
-                modal.classList.remove("is-active");
-              });
-              this.$emit('fetchEvents')
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.success) {
+            (document.querySelectorAll(".modal") || []).forEach((modal) => {
+              modal.classList.remove("is-active");
+            });
+            this.$emit("fetchEvents");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
-    getAge(date) {
-      let dateNow = new Date()
-      let dateBefore = new Date(date)
-      return dateNow.getYear() - dateBefore.getYear()
-    }
-  }
-}
+    calculateAge(birthdateString: string) {
+      const birthdate = new Date(birthdateString);
+      const today = new Date("2023-10-10");
+
+      let age = today.getFullYear() - birthdate.getFullYear();
+      const monthDifference = today.getMonth() - birthdate.getMonth();
+
+      // If the birth month has not occurred this year yet, or if it's the birth month but the birth day has not yet occurred, subtract 1 from the age.
+      if (
+        monthDifference < 0 ||
+        (monthDifference === 0 && today.getDate() < birthdate.getDate())
+      ) {
+        age--;
+      }
+
+      return age;
+    },
+  },
+};
 </script>
