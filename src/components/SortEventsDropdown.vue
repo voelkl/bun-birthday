@@ -1,6 +1,6 @@
 <template>
   <div
-    class="dropdown"
+    class="dropdown mb-4"
     :class="{ 'is-active': is_active }"
     @click="is_active = !is_active"
   >

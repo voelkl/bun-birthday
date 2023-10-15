@@ -1,9 +1,9 @@
 <template>
   <div>
     <div id="calendar-header">
-      <button class="button" @click="previousMonth">Prev</button>
+      <button class="button is-link" @click="previousMonth">Prev</button>
       <span>{{ monthNames[currentMonth] }} {{ currentYear }}</span>
-      <button class="button" @click="nextMonth">Next</button>
+      <button class="button is-link" @click="nextMonth">Next</button>
     </div>
 
     <div id="calendar">
@@ -14,7 +14,14 @@
         v-for="day in allDays"
         :key="day.key"
         class="day"
-        :class="{ 'outside-month': day.isOutside }"
+        :class="{
+          today:
+            day.year === new Date().getFullYear() &&
+            day.month === new Date().getMonth() &&
+            day.date === new Date().getDate(),
+          'outside-month': day.isOutside,
+          birthday: hasBirthday(day.year, day.month, day.date),
+        }"
         @click="selectDay(day)"
       >
         {{ day.date }}
@@ -25,6 +32,16 @@
 
 <script>
 export default {
+  props: {
+    events: Array,
+    default: () => [
+      {
+        name: "Birthday",
+        date: "2021-01-01",
+        details: "This is a birthday event",
+      },
+    ],
+  },
   data() {
     return {
       currentMonth: new Date().getMonth(),
@@ -142,6 +159,14 @@ export default {
 
       this.allDays = days;
     },
+    hasBirthday(year, month, day) {
+      return this.events.some((event) => {
+        const eventDate = new Date(event.date);
+        if (eventDate.getMonth() == month && eventDate.getDate() == day) {
+          return true;
+        }
+      });
+    },
   },
 };
 </script>
@@ -160,13 +185,14 @@ export default {
   align-items: center;
   justify-content: center;
   border: 1px solid hsl(0, 0%, 48%);
+  border-radius: 0.4rem;
   margin: auto;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
 .birthday {
-  background-color: yellow;
+  background-color: #fae6fa;
 }
 
 .day:hover {
@@ -201,5 +227,9 @@ export default {
   text-align: center;
   font-weight: bold;
   margin-bottom: 10px;
+}
+
+.today {
+  background-color: #b2d7ff;
 }
 </style>

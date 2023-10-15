@@ -7,10 +7,16 @@
       </h1>
       <div class="columns">
         <div class="column">
-          <modal modal_id="add_event_modal" modal_name="Add Birthday Event">
-            <add-event-form @fetchEvents="fetchEvents" />
-          </modal>
-          <calendar :events="events" />
+          <div class="cal-col">
+            <modal
+              class="mb-4"
+              modal_id="add_event_modal"
+              modal_name="Add Birthday Event"
+            >
+              <add-event-form @fetchEvents="fetchEvents" />
+            </modal>
+            <calendar :events="events" />
+          </div>
         </div>
         <div class="column">
           <sort-events-dropdown
@@ -106,11 +112,11 @@ export default {
     sortEvents(): void {
       const now = new Date().getTime();
 
-      if (this.sortType == "DATE" && this.sortDirection == "ASC") {
+      if (this.sortType == "DATE" && this.sortDirection == "DESC") {
         this.events.sort((a, b) => {
           return new Date(a.date).getTime() - new Date(b.date).getTime();
         });
-      } else if (this.sortType == "DATE" && this.sortDirection == "DESC") {
+      } else if (this.sortType == "DATE" && this.sortDirection == "ASC") {
         this.events.sort((a, b) => {
           return new Date(b.date).getTime() - new Date(a.date).getTime();
         });
@@ -162,5 +168,10 @@ export default {
 <style>
 .card-content .content {
   text-align: left;
+}
+
+.cal-col {
+  position: sticky;
+  top: 3rem;
 }
 </style>

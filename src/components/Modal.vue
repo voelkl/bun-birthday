@@ -2,7 +2,7 @@
   <div>
     <button
       ref="modal-button"
-      class="js-modal-trigger button is-primary m-1"
+      class="js-modal-trigger button is-primary"
       :data-target="this.modal_id"
       @click="openModal()"
     >

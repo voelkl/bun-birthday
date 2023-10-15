@@ -19,5 +19,5 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "backend/db.ts"]
+  "include": ["src", "db.ts"]
 }

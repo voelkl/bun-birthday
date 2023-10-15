@@ -2,14 +2,67 @@
   <ul id="eventsList">
     <li v-for="event in events">
       <div class="card mb-2">
-        <header class="card-header">
+        <header class="card-header p-2 is-3">
           <p class="card-header-title">
             {{ event.title }}
           </p>
-          <modal modal_id="edit_event_modal" modal_name="Edit Event">
-            <edit-event-form :event_props="event" />
+          <modal
+            :modal_id="`edit_event_modal-${event.id}`"
+            modal_name="Edit Event"
+          >
+            <form
+              ref="editEventForm"
+              @submit.prevent="editEvent(event)"
+              id="edit-birthday-form"
+            >
+              <div class="field">
+                <label class="label">Name</label>
+                <div class="control">
+                  <input
+                    class="input"
+                    v-model="event.title"
+                    name="title"
+                    type="text"
+                  />
+                </div>
+              </div>
+              <div class="field">
+                <label class="label">Details</label>
+                <div class="control">
+                  <input
+                    class="input"
+                    v-model="event.description"
+                    name="description"
+                    type="text"
+                    id="birthday-description"
+                  />
+                </div>
+              </div>
+              <div class="field">
+                <label class="label">Date</label>
+                <div class="control">
+                  <input
+                    class="input"
+                    v-model="event.date"
+                    name="date"
+                    type="date"
+                    id="birthday-date"
+                  />
+                </div>
+              </div>
+              <input
+                @click="editEvent"
+                class="button"
+                id="confirmBtn"
+                type="submit"
+                value="Submit"
+              />
+            </form>
           </modal>
-          <modal modal_id="delete_event_modal" modal_name="Delete Event">
+          <modal
+            :modal_id="`delete_event_modal-${event.id}`"
+            modal_name="Delete Event"
+          >
             <div>
               <p>Are you sure you want to delete this event?</p>
               <button class="button" @click="deleteEvent(event)">
@@ -32,7 +85,6 @@
   </ul>
 </template>
 <script lang="ts">
-import EditEventForm from "./EditEventForm.vue";
 import Modal from "./Modal.vue";
 
 type BirthdayEvent = {
@@ -44,13 +96,37 @@ type BirthdayEvent = {
 export default {
   components: {
     Modal,
-    EditEventForm,
   },
   name: "EventsList",
   props: {
     events: Array,
   },
   methods: {
+    editEvent(event) {
+      if (event.title && event.date) {
+        fetch(`http://localhost:3000/events/${event.id}`, {
+          method: "PUT",
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title: event.title,
+            description: event.description,
+            date: event.date,
+          }),
+        })
+          .then((res) => res.json())
+          .then((res) => {
+            if (res.success) {
+              console.log("Event updated successfully");
+              (document.querySelectorAll(".modal") || []).forEach((modal) => {
+                modal.classList.remove("is-active");
+              });
+            }
+          });
+      }
+    },
     deleteEvent(event) {
       fetch(`http://localhost:3000/events/${event.id}`, {
         method: "DELETE",
