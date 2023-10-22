@@ -5,6 +5,9 @@
         <header class="card-header p-2 is-3">
           <p class="card-header-title">
             {{ event.title }}
+          <span class="tag ml-2">
+            {{ calculateAge(event.date) }}
+          </span>
           </p>
           <modal
             :modal_id="`edit_event_modal-${event.id}`"
@@ -73,11 +76,14 @@
         </header>
         <div class="card-content">
           <div class="content">
-            <p>Alter: {{ calculateAge(event.date) }}</p>
-            <p id="birth-date-${event.id}">Date: {{ event.date }}</p>
-            <p id="birthday-ideas-${event.id}">
-              Details: {{ event.description }}
-            </p>
+            <p id="birth-date-${event.id}">{{ new Date(event.date).toLocaleDateString('de-DE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) }}</p>
+            <p>Hat in {{ calculateDaysLeft(event.date) }} Tagen Geburtstag</p>
+            <div class="is-flex is-align-content-center">
+              <i class="material-icons mr-1">redeem</i>
+              <div>
+                {{ event.description }}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -164,6 +170,20 @@ export default {
 
       return age;
     },
+    calculateDaysLeft(birthday: string) {
+      const today = new Date();
+      const birthDate = new Date(birthday);
+      const currentYear = today.getFullYear();
+      const birthMonth = birthDate.getMonth();
+      const birthDay = birthDate.getDate();
+      const nextBirthday = new Date(currentYear, birthMonth, birthDay);
+      if (nextBirthday < today) {
+        nextBirthday.setFullYear(currentYear + 1);
+      }
+      const timeDiff = nextBirthday.getTime() - today.getTime();
+      const daysLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
+      return daysLeft;
+    }
   },
 };
 </script>

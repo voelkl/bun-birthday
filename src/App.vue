@@ -1,36 +1,43 @@
 <template>
   <div class="container">
     <div class="section">
-      <h1 class="title">
-        <i class="material-icons">calendar_month</i>
+      <h1 class="title is-flex is-align-content-center is-justify-content-center">
+        <i class="material-icons mr-1">calendar_month</i>
         My Birthday Events
       </h1>
       <div class="columns">
         <div class="column">
           <div class="cal-col">
-            <modal
-              class="mb-4"
-              modal_id="add_event_modal"
-              modal_name="Add Birthday Event"
-            >
-              <add-event-form @fetchEvents="fetchEvents" />
-            </modal>
-            <calendar :events="events" />
+            <calendar :events="filtered_events" />
           </div>
         </div>
         <div class="column">
-          <sort-events-dropdown
-            :events="events"
-            @sortEvents="sortEvents"
-            @setSortType="setSortType"
-          />
-          <sort-direction-dropdown
-            v-show="sortType !== 'UPCOMING'"
-            :events="events"
-            @setSortDirection="setSortDirection"
-            @sortEvents="sortEvents"
-          />
-          <events-list :events="events" @fetchEvents="fetchEvents" />
+          <div>
+
+          </div>
+          <filter-input @filter="filter" />
+          <div class="is-flex is-justify-content-space-between">
+            <div class="mb-1">
+              <sort-events-dropdown
+                :events="events"
+                @sortEvents="sortEvents"
+                @setSortType="setSortType"
+              />
+              <sort-direction-dropdown
+                v-show="sortType !== 'UPCOMING'"
+                :events="events"
+                @setSortDirection="setSortDirection"
+                @sortEvents="sortEvents"
+              />
+            </div>
+            <modal
+              modal_id="add_event_modal"
+              modal_name="add"
+            >
+              <add-event-form @fetchEvents="fetchEvents" />
+            </modal>
+          </div>
+          <events-list :events="filtered_events" @fetchEvents="fetchEvents" />
         </div>
       </div>
     </div>
@@ -43,6 +50,7 @@ import EventsList from "./components/EventsList.vue";
 import Calendar from "./components/Calendar.vue";
 import SortEventsDropdown from "./components/SortEventsDropdown.vue";
 import SortDirectionDropdown from "./components/SortDirectionDropdown.vue";
+import FilterInput from "./components/FilterInput.vue"
 
 interface Window {
   jsCalendar: any;
@@ -67,10 +75,12 @@ export default {
     Modal,
     AddEventForm,
     SortDirectionDropdown,
+    FilterInput
   },
   data() {
     return {
       events: [],
+      filtered_events: [],
       sortDirection: "DESC",
       sortType: "UPCOMING",
     };
@@ -89,6 +99,7 @@ export default {
         .then((res) => res.json())
         .then((events) => {
           this.events = events;
+          this.filtered_events = events;
           this.sortEvents();
         })
         .catch((error) => {
@@ -161,6 +172,15 @@ export default {
     setSortType(type) {
       this.sortType = type;
     },
+    filter(text) {
+      if (text === "") {
+        this.filtered_events = this.events;
+        return;
+      }
+      this.filtered_events = this.events.filter((event) => {
+        return event.title.toLowerCase().includes(text.toLowerCase());
+      });
+    },
   },
 };
 </script>
@@ -170,8 +190,17 @@ export default {
   text-align: left;
 }
 
+.dropdown-item {
+  cursor: pointer;
+}
+
 .cal-col {
-  position: sticky;
-  top: 3rem;
+  width: 100%;
+  max-width: 26rem;
+  margin: auto;
+}
+
+h1 .material-icons {
+  font-size: 2.3rem;
 }
 </style>

@@ -2,11 +2,16 @@
   <div>
     <button
       ref="modal-button"
-      class="js-modal-trigger button is-primary"
+      class="js-modal-trigger button is-primary is-outlined p-2"
       :data-target="this.modal_id"
       @click="openModal()"
     >
-      {{ this.modal_name }}
+      <i v-if="modal_name == 'Edit Event'" class="material-icons">edit</i>
+      <i v-else-if="modal_name == 'add'" class="material-icons">add</i>
+      <i v-else-if="modal_name == 'Delete Event'" class="material-icons">delete</i>
+      <i v-else class="material-icons">
+        {{ this.modal_name }}
+      </i>
     </button>
     <div ref="modal" :id="modal_id" class="modal">
       <div class="modal-background"></div>
@@ -70,4 +75,13 @@ export default {
   },
 };
 </script>
+<style scoped lang="scss">
+.button {
+  margin-left: 5px;
+
+  i {
+   font-size: 18px;
+  }
+}
+</style>
 

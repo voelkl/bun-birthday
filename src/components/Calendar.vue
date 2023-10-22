@@ -1,9 +1,9 @@
 <template>
   <div>
     <div id="calendar-header">
-      <button class="button is-link" @click="previousMonth">Prev</button>
+      <button class="button is-primary" @click="previousMonth">Prev</button>
       <span>{{ monthNames[currentMonth] }} {{ currentYear }}</span>
-      <button class="button is-link" @click="nextMonth">Next</button>
+      <button class="button is-primary" @click="nextMonth">Next</button>
     </div>
 
     <div id="calendar">
@@ -19,11 +19,19 @@
             day.year === new Date().getFullYear() &&
             day.month === new Date().getMonth() &&
             day.date === new Date().getDate(),
-          'outside-month': day.isOutside,
           birthday: hasBirthday(day.year, day.month, day.date),
+          'outside-month': day.isOutside,
         }"
+        :title="handleDayTitle(day)"
         @click="selectDay(day)"
+        @mouseover="selectDay(day)"
       >
+        <div class="notification is-primary is-light is-hidden">
+          <div class="delete"></div>
+          <div v-for="event in selectDay(day)" :key="event.id">
+            {{ event.title }}
+          </div>
+        </div>
         {{ day.date }}
       </div>
     </div>
@@ -69,7 +77,8 @@ export default {
   },
   methods: {
     selectDay(day) {
-      alert(`Selected date: ${day.year}-${day.month + 1}-${day.date}`);
+      
+      return this.getBirthdaysOfDay(day);
     },
     previousMonth() {
       this.currentMonth--;
@@ -167,11 +176,34 @@ export default {
         }
       });
     },
+    handleDayTitle(day) {
+      const events = this.getBirthdaysOfDay(day);
+      if (events === "No events") {
+        return events;
+      }
+      return events.map((event) => event.title).join(", ");
+    },
+    getBirthdaysOfDay(day) {
+      const events = this.events.filter((event) => {
+        const eventDate = new Date(event.date);
+        if (
+          eventDate.getMonth() == day.month &&
+          eventDate.getDate() == day.date
+        ) {
+          return true;
+        }
+      });
+
+      if (events.length === 0) {
+        return "No events";
+      }
+      return events;
+    },
   },
 };
 </script>
 
-<style>
+<style lang="scss">
 #calendar {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -179,8 +211,6 @@ export default {
 }
 
 .day {
-  width: 50px;
-  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -189,14 +219,26 @@ export default {
   margin: auto;
   cursor: pointer;
   transition: background-color 0.3s;
+  padding: .2rem .7rem;
+  min-height: 50px;
+  min-width: 50px;
+
+  @media (max-width: 996px) {
+    padding: 0;
+    min-width: initial;
+    min-height: initial;
+    height: 2.5rem;
+    width: 100%;
+  }
 }
 
 .birthday {
-  background-color: #fae6fa;
+  color: white;
+  background-color: hsl(217, 71%, 53%)
 }
 
 .day:hover {
-  background-color: #e9e9e9;
+  border: 1px solid hsl(171, 100%, 41%);
 }
 
 .outside-month {
@@ -211,25 +253,28 @@ export default {
   margin-bottom: 20px;
 }
 
-#calendar-header button {
-  background-color: #b2d7ff;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-#calendar-header button:hover {
-  background-color: #7faee3;
-}
-
 .day-name {
   text-align: center;
   font-weight: bold;
-  margin-bottom: 10px;
 }
 
 .today {
-  background-color: #b2d7ff;
+  color: hsl(171, 100%, 41%);
+  border: 2px solid hsl(171, 100%, 41%);
+}
+
+.today.birthday {
+  background-color: plum;
+}
+
+.notification {
+  position: absolute;
+  margin-top: -14rem;
+  width: 10rem;
+  height: 10rem;
+}
+
+.day:hover .notification {
+  display: block;
 }
 </style>
