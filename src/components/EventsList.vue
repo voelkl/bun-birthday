@@ -1,6 +1,9 @@
 <template>
   <ul id="eventsList">
-    <li v-for="event in events">
+    <li
+      v-for="event in events"
+      :key="event.id"
+    >
       <div class="card mb-2">
         <header class="card-header p-2 is-3">
           <p class="card-header-title">
@@ -76,7 +79,7 @@
         </header>
         <div class="card-content">
           <div class="content">
-            <p id="birth-date-${event.id}">{{ new Date(event.date).toLocaleDateString('de-DE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) }}</p>
+            <p id="birth-date-${event.id}">{{ new Date(event.date).toLocaleDateString('de-DE', { year: 'numeric', month: 'long', day: 'numeric' }) }}</p>
             <p>Hat in {{ calculateDaysLeft(event.date) }} Tagen Geburtstag</p>
             <div class="is-flex is-align-content-center">
               <i class="material-icons mr-1">redeem</i>
@@ -90,15 +93,8 @@
     </li>
   </ul>
 </template>
-<script lang="ts">
+<script>
 import Modal from "./Modal.vue";
-
-type BirthdayEvent = {
-  id?: number;
-  title: string;
-  description: string;
-  date: string;
-};
 export default {
   components: {
     Modal,
@@ -110,7 +106,7 @@ export default {
   methods: {
     editEvent(event) {
       if (event.title && event.date) {
-        fetch(`http://localhost:3000/events/${event.id}`, {
+        fetch(`http://localhost:4000/events/${event.id}`, {
           method: "PUT",
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -134,7 +130,7 @@ export default {
       }
     },
     deleteEvent(event) {
-      fetch(`http://localhost:3000/events/${event.id}`, {
+      fetch(`http://localhost:4000/events/${event.id}`, {
         method: "DELETE",
         headers: {
           "Access-Control-Allow-Origin": "*",
@@ -153,9 +149,9 @@ export default {
           console.log(err);
         });
     },
-    calculateAge(birthdateString: string) {
+    calculateAge(birthdateString) {
       const birthdate = new Date(birthdateString);
-      const today = new Date("2023-10-10");
+      const today = new Date();
 
       let age = today.getFullYear() - birthdate.getFullYear();
       const monthDifference = today.getMonth() - birthdate.getMonth();
@@ -170,7 +166,7 @@ export default {
 
       return age;
     },
-    calculateDaysLeft(birthday: string) {
+    calculateDaysLeft(birthday) {
       const today = new Date();
       const birthDate = new Date(birthday);
       const currentYear = today.getFullYear();

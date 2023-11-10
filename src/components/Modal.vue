@@ -12,6 +12,9 @@
       <i v-else class="material-icons">
         {{ this.modal_name }}
       </i>
+      <span v-if="modal_name == 'add'">
+        Add new Birthday
+      </span>
     </button>
     <div ref="modal" :id="modal_id" class="modal">
       <div class="modal-background"></div>

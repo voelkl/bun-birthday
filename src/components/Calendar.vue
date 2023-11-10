@@ -1,11 +1,21 @@
 <template>
   <div>
+    <div
+      ref="notification"
+      class="notification"
+      :class="{ 'is-invisible': hideNotication }"
+    >
+      <button class="delete" @click="hideNotication = !hideNotication"></button>
+      <div v-for="birthday in clickedDayBirthdays" :key="birthday.id">
+        <h3>{{ birthday.title }}</h3>
+        <p>{{ birthday.description }}</p>
+      </div>
+    </div>
     <div id="calendar-header">
       <button class="button is-primary" @click="previousMonth">Prev</button>
       <span>{{ monthNames[currentMonth] }} {{ currentYear }}</span>
       <button class="button is-primary" @click="nextMonth">Next</button>
     </div>
-
     <div id="calendar">
       <div class="day-name" v-for="dayName in dayNames" :key="dayName">
         {{ dayName }}
@@ -23,15 +33,8 @@
           'outside-month': day.isOutside,
         }"
         :title="handleDayTitle(day)"
-        @click="selectDay(day)"
-        @mouseover="selectDay(day)"
+        @click="selectDay($event, day)"
       >
-        <div class="notification is-primary is-light is-hidden">
-          <div class="delete"></div>
-          <div v-for="event in selectDay(day)" :key="event.id">
-            {{ event.title }}
-          </div>
-        </div>
         {{ day.date }}
       </div>
     </div>
@@ -39,7 +42,12 @@
 </template>
 
 <script>
+import InfoBox from "./InfoBox.vue";
 export default {
+  name: "Calendar",
+  components: {
+    InfoBox
+  },
   props: {
     events: Array,
     default: () => [
@@ -70,15 +78,42 @@ export default {
       ],
       dayNames: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
       allDays: [],
+      clickedDayBirthdays: {},
+      hideNotication: true,
     };
   },
   mounted() {
     this.generateDays();
   },
   methods: {
-    selectDay(day) {
-      
-      return this.getBirthdaysOfDay(day);
+    selectDay(event, day) {
+      let x = event.pageX;
+      let y = event.pageY;
+      let screenWidth = window.innerWidth;
+      let screenHeight = window.innerHeight;
+
+      let notificationHeight = this.$refs.notification.offsetHeight;
+      let notificationWidth = this.$refs.notification.offsetWidth;
+
+      console.log(this.$refs.notification.offsetWidth)
+
+      // Adjust the left position based on click location and screen width
+      if (x > screenWidth / 2) {
+          // If click is on the right half of the screen, position to the left of the click
+          // Also, ensure that it does not go off the screen on the left side
+          this.$refs.notification.style.left = Math.max(0, x - notificationWidth) + 'px'; 
+      } else {
+          // If click is on the left half, position to the right of the click
+          // Also, ensure that it does not go off the screen on the right side
+          this.$refs.notification.style.left = Math.min(screenWidth - notificationWidth, x) + 'px';
+      }
+
+      // Adjust the top position based on click location and screen height
+      // Ensure that notification doesn't go off the screen on the top
+      this.$refs.notification.style.top = Math.max(0, y - notificationHeight) + 'px';
+      this.hideNotication = !this.hideNotication;
+
+      this.clickedDayBirthdays = this.getBirthdaysOfDay(day)
     },
     previousMonth() {
       this.currentMonth--;
@@ -264,14 +299,16 @@ export default {
 }
 
 .today.birthday {
+  color: initial;
   background-color: plum;
+  border: initial;
 }
 
 .notification {
   position: absolute;
-  margin-top: -14rem;
-  width: 10rem;
+  width: 15rem;
   height: 10rem;
+  z-index: 100;
 }
 
 .day:hover .notification {

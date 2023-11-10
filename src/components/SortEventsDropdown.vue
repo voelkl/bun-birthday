@@ -1,4 +1,12 @@
 <template>
+    <div class="subtitle">
+      <span class="icon-text">
+        <span class="icon">
+          <i class="material-icons">sort</i>
+        </span>
+        <span>Sort by</span>
+      </span>
+    </div>
   <div
     class="dropdown"
     :class="{ 'is-active': is_active }"
@@ -13,13 +21,13 @@
     <div class="dropdown-menu" id="dropdown-menu" role="menu">
       <div class="dropdown-content">
         <div class="dropdown-item" @click="handleDropdownClick('DATE')">
-          Sort by Date
+          Date
         </div>
         <div class="dropdown-item" @click="handleDropdownClick('NAME')">
-          Sort by Name
+          Name
         </div>
         <div class="dropdown-item" @click="handleDropdownClick('UPCOMING')">
-          Sort by Upcoming
+          Upcoming
         </div>
       </div>
     </div>
@@ -34,21 +42,21 @@ export default {
   data() {
     return {
       is_active: false,
-      selected_dropdown_item: "Sort by Upcoming",
+      selected_dropdown_item: "Upcoming",
     };
   },
   methods: {
     handleDropdownClick(item) {
       if (item === "DATE") {
-        this.selected_dropdown_item = "Sort by Date";
+        this.selected_dropdown_item = "Date";
         this.$emit("setSortType", item);
         this.$emit("sortEvents");
       } else if (item === "NAME") {
-        this.selected_dropdown_item = "Sort by Name";
+        this.selected_dropdown_item = "Name";
         this.$emit("setSortType", item);
         this.$emit("sortEvents");
       } else if (item === "UPCOMING") {
-        this.selected_dropdown_item = "Sort by Upcoming";
+        this.selected_dropdown_item = "Upcoming";
         this.$emit("setSortType", item);
         this.$emit("sortEvents");
       }

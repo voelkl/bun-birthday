@@ -16,6 +16,7 @@
 
           </div>
           <filter-input @filter="filter" />
+          <filter-by-date @filterEventsByDate="filterEventsByDate" />
           <div class="is-flex is-justify-content-space-between">
             <div class="mb-1">
               <sort-events-dropdown
@@ -51,6 +52,7 @@ import Calendar from "./components/Calendar.vue";
 import SortEventsDropdown from "./components/SortEventsDropdown.vue";
 import SortDirectionDropdown from "./components/SortDirectionDropdown.vue";
 import FilterInput from "./components/FilterInput.vue"
+import FilterByDate from "./components/FilterByDate.vue"
 
 interface Window {
   jsCalendar: any;
@@ -75,7 +77,8 @@ export default {
     Modal,
     AddEventForm,
     SortDirectionDropdown,
-    FilterInput
+    FilterInput,
+    FilterByDate,
   },
   data() {
     return {
@@ -90,7 +93,7 @@ export default {
   },
   methods: {
     fetchEvents(): void {
-      fetch("http://localhost:3000/events", {
+      fetch("http://localhost:4000/events", {
         method: "GET",
         headers: {
           "Access-Control-Allow-Origin": "*",
@@ -181,6 +184,16 @@ export default {
         return event.title.toLowerCase().includes(text.toLowerCase());
       });
     },
+    filterEventsByDate(startDate:string, endDate:string) {
+      this.filteredEvents = this.events.filter((event) => {
+        const eventDate = new Date(event.date);
+        const start = startDate ? new Date(startDate) : new Date(-8640000000000000); // -Infinity
+        const end = endDate ? new Date(endDate) : new Date(8640000000000000); // Infinity
+
+        return eventDate >= start && eventDate <= end;
+      });
+    },
+
   },
 };
 </script>

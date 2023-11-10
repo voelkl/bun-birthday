@@ -50,4 +50,4 @@ new Elysia()
       return { success: false };
     }
   })
-  .listen(3000);
+  .listen(4000, () => console.log("listening on port: 4000"));
