@@ -7,6 +7,7 @@ new Elysia()
   .use(cors())
   .use(html())
   .decorate("db", new EventsDatabase())
+  .get("/", async () => Bun.file('./dist/index.html'))
   .get("/events", ({ db }) => db.getEvents())
   .post(
     "/events",
@@ -26,7 +27,8 @@ new Elysia()
     "/events/:id",
     ({ db, params, body }) => {
       try {
-        db.updateEvent(parseInt(params.id), body) 
+        db.updateEvent(parseInt(params.id), body)
+        console.log("Event updated successfully")
         return { success: true };
       } catch (e) {
         return { success: false };

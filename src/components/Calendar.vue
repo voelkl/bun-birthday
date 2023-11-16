@@ -6,10 +6,18 @@
       :class="{ 'is-invisible': hideNotication }"
     >
       <button class="delete" @click="hideNotication = !hideNotication"></button>
-      <div v-for="birthday in clickedDayBirthdays" :key="birthday.id">
-        <h3>{{ birthday.title }}</h3>
-        <p>{{ birthday.description }}</p>
-      </div>
+      <ul v-if="clickedDayBirthdays !== 'No events'">
+        <li v-for="birthday in clickedDayBirthdays" :key="birthday.id">
+          <div v-if="birthday.title">
+            <h2>Birthdays:</h2>
+            <h3>{{ birthday.title }}</h3>
+            <p>gift-idea: {{ birthday.description }}</p>
+          </div>
+        </li>
+      </ul>
+      <ul v-else>
+        <li>{{ clickedDayBirthdays }}</li>
+      </ul>
     </div>
     <div id="calendar-header">
       <button class="button is-primary" @click="previousMonth">Prev</button>
@@ -94,8 +102,6 @@ export default {
 
       let notificationHeight = this.$refs.notification.offsetHeight;
       let notificationWidth = this.$refs.notification.offsetWidth;
-
-      console.log(this.$refs.notification.offsetWidth)
 
       // Adjust the left position based on click location and screen width
       if (x > screenWidth / 2) {

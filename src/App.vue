@@ -16,7 +16,7 @@
 
           </div>
           <filter-input @filter="filter" />
-          <filter-by-date @filterEventsByDate="filterEventsByDate" />
+          <!--<filter-by-date @filterEventsByDate="filterEventsByDate" />-->
           <div class="is-flex is-justify-content-space-between">
             <div class="mb-1">
               <sort-events-dropdown
@@ -44,7 +44,7 @@
     </div>
   </div>
 </template>
-<script lang="ts">
+<script>
 import Modal from "./components/Modal.vue";
 import AddEventForm from "./components/AddEventForm.vue";
 import EventsList from "./components/EventsList.vue";
@@ -53,20 +53,6 @@ import SortEventsDropdown from "./components/SortEventsDropdown.vue";
 import SortDirectionDropdown from "./components/SortDirectionDropdown.vue";
 import FilterInput from "./components/FilterInput.vue"
 import FilterByDate from "./components/FilterByDate.vue"
-
-interface Window {
-  jsCalendar: any;
-  bunCalendar: any;
-}
-
-type BirthdayEvent = {
-  id?: number;
-  title: string;
-  description: string;
-  date: string;
-};
-
-type BirthdayEvents = BirthdayEvent[];
 
 export default {
   name: "App",
@@ -92,7 +78,7 @@ export default {
     this.fetchEvents();
   },
   methods: {
-    fetchEvents(): void {
+    fetchEvents() {
       fetch("http://localhost:4000/events", {
         method: "GET",
         headers: {
@@ -109,7 +95,7 @@ export default {
           console.log(error);
         });
     },
-    isBirthdayUpcoming(eventDateString: string) {
+    isBirthdayUpcoming(eventDateString) {
       const eventDate = new Date(eventDateString);
       const currentDate = new Date();
       if (eventDate.getMonth() > currentDate.getMonth()) {
@@ -123,7 +109,7 @@ export default {
       }
       return false;
     },
-    sortEvents(): void {
+    sortEvents() {
       const now = new Date().getTime();
 
       if (this.sortType == "DATE" && this.sortDirection == "DESC") {
@@ -184,7 +170,7 @@ export default {
         return event.title.toLowerCase().includes(text.toLowerCase());
       });
     },
-    filterEventsByDate(startDate:string, endDate:string) {
+    filterEventsByDate(startDate, endDate) {
       this.filteredEvents = this.events.filter((event) => {
         const eventDate = new Date(event.date);
         const start = startDate ? new Date(startDate) : new Date(-8640000000000000); // -Infinity

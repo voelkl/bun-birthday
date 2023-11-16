@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-2">
+  <div class="mb-2 hide">
     <h2 class="subtitle mb-1">Filter by date</h2>
     <div class="columns">
       <div class="column">
