@@ -50,7 +50,6 @@ export default {
       date: "",
     },
   }),
-
   methods: {
     addNewEvent(event) {
       if (event.title && event.date) {

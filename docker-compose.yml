@@ -12,5 +12,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.web
+      args:
+        USERNAME: gordo
+        PASSWORD: g00d_p4ssw0rd_123!
     ports:
       - "80:80"

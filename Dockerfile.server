@@ -1,6 +1,10 @@
 FROM oven/bun:latest
 
+COPY package*.json ./
+RUN bun install
+
 COPY ./ ./
+RUN bun vite build
 
 # run the app
 USER bun
