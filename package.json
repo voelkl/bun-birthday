@@ -20,6 +20,7 @@
     "@elysiajs/cors": "^0.7.0",
     "@elysiajs/html": "^0.7.0",
     "elysia": "^0.7.12",
+    "material-design-icons": "^3.0.1",
     "vue": "^3.3.4"
   }
 }

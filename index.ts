@@ -7,7 +7,7 @@ new Elysia()
   .use(cors())
   .use(html())
   .decorate("db", new EventsDatabase())
-  .get("/", async () => Bun.file('./dist/index.html'))
+  .get("/", () => new Response(Bun.file(import.meta.dir +'/dist/index.html')))
   .get("/events", ({ db }) => db.getEvents())
   .post(
     "/events",
