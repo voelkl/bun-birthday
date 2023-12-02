@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 services:
   server:
     build:
@@ -17,3 +17,11 @@ services:
         PASSWORD: g00d_p4ssw0rd_123!
     ports:
       - "80:80"
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./certs:/etc/letsencrypt
+      - ./certbot-data:/data/letsencrypt
+    depends_on:
+      - web
+    entrypoint: /bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'
