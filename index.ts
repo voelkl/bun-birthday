@@ -9,6 +9,7 @@ new Elysia()
   .decorate("db", new EventsDatabase())
   .get("/", () => new Response(Bun.file(import.meta.dir +'/dist/index.html')))
   .get("/events", ({ db }) => db.getEvents())
+  .get("/event/:id", ({ db, params }) => db.getEvent(parseInt(params.id)))
   .post(
     "/events",
     async ({ db, body }) => {

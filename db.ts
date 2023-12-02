@@ -21,6 +21,13 @@ export class EventsDatabase {
   async init() {
       return this.db.run('CREATE TABLE IF NOT EXISTS events (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT, date TEXT)');
   }
+
+  // Get a event
+  async getEvent(id: number) {
+    return this.db.query(`SELECT * FROM events WHERE id = ${id}`).get();
+  }
+
+  // Get all events
   async getEvents() {
     return this.db.query('SELECT * FROM events').all();
   }
