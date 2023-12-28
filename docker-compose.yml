@@ -20,11 +20,12 @@ services:
     volumes:
       - ./certs:/etc/letsencrypt
       - ./certbot-data:/data/letsencrypt
-  certbot:
-    image: certbot/certbot
-    volumes:
-      - ./certs:/etc/letsencrypt
-      - ./certbot-data:/data/letsencrypt
-    depends_on:
-      - web
-    entrypoint: /bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'
+
+  #certbot:
+  #  image: certbot/certbot
+  #  volumes:
+  #    - ./certs:/etc/letsencrypt
+  #    - ./certbot-data:/data/letsencrypt
+  #  depends_on:
+  #    - web
+  #  entrypoint: /bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'

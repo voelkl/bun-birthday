@@ -4,10 +4,13 @@ import { html } from '@elysiajs/html'
 import { cors } from '@elysiajs/cors'
 
 new Elysia()
-  .use(cors())
+  .use(cors(
+    {
+      methods: ['GET', 'POST', 'PUT', 'DELETE']
+    }
+  ))
   .use(html())
   .decorate("db", new EventsDatabase())
-  .get("/", () => new Response(Bun.file(import.meta.dir +'/dist/index.html')))
   .get("/events", ({ db }) => db.getEvents())
   .get("/event/:id", ({ db, params }) => db.getEvent(parseInt(params.id)))
   .post(

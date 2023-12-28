@@ -2,8 +2,7 @@ FROM oven/bun:latest
 
 COPY ./ ./
 RUN bun install
-
-RUN bun vite build
+#RUN bun vite build
 
 # run the app
 EXPOSE 4000/tcp

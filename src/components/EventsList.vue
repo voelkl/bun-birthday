@@ -134,6 +134,7 @@ export default {
         method: "DELETE",
         headers: {
           "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, DELETE",
         },
       })
         .then((res) => res.json())
