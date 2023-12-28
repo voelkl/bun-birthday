@@ -1,7 +1,7 @@
-FROM oven/bun:latest
+FROM oven/bun:alpine
 
 COPY ./ ./
-RUN bun install
+RUN bun install --production
 #RUN bun vite build
 
 # run the app

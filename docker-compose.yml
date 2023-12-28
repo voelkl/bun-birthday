@@ -14,7 +14,7 @@ services:
       dockerfile: Dockerfile.web
       args:
         USERNAME: gordo
-        PASSWORD: g00d_p4ssw0rd_123!
+        PASSWORD: FCkzTVRe4ETcB9fxrxVM5MSnuM3YizyE4x9uAbQC
     ports:
       - "80:80"
     volumes:
