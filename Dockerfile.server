@@ -1,8 +1,8 @@
-FROM oven/bun:alpine
+FROM oven/bun:latest
 
 COPY ./ ./
 RUN bun install --production
-RUN bun run build
+#RUN bun vite build
 
 # run the app
 EXPOSE 4000/tcp
