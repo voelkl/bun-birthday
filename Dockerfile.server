@@ -2,7 +2,7 @@ FROM oven/bun:alpine
 
 COPY ./ ./
 RUN bun install --production
-#RUN bun vite build
+RUN bun run build
 
 # run the app
 EXPOSE 4000/tcp
