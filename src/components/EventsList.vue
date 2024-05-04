@@ -106,7 +106,7 @@ export default {
   methods: {
     editEvent(event) {
       if (event.title && event.date) {
-        fetch(`http://localhost:4000/events/${event.id}`, {
+        fetch(`http://server:4000/events/${event.id}`, {
           method: "PUT",
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -130,7 +130,7 @@ export default {
       }
     },
     deleteEvent(event) {
-      fetch(`http://localhost:4000/events/${event.id}`, {
+      fetch(`http://server:4000/events/${event.id}`, {
         method: "DELETE",
         headers: {
           "Access-Control-Allow-Origin": "*",
@@ -184,3 +184,10 @@ export default {
   },
 };
 </script>
+<style scoped>
+#eventsList {
+  padding: 6px;
+  overflow: auto;
+  height: 63rem;
+}
+</style>
