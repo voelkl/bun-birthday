@@ -2,6 +2,8 @@ import { Elysia, t } from "elysia";
 import { EventsDatabase } from "./db.js";
 import { html } from '@elysiajs/html'
 import { cors } from '@elysiajs/cors'
+import { bearer } from "@elysiajs/bearer"
+
 
 new Elysia()
   .use(cors(
@@ -9,6 +11,13 @@ new Elysia()
       methods: ['GET', 'POST', 'PUT', 'DELETE']
     }
   ))
+  .use(bearer()).onBeforeHandle(async ({ bearer }) => {
+    if (!bearer) throw new Error("Unauthorized");
+    const isAuthorized = bearer === "12345678";
+    if (!isAuthorized) {
+      throw new Error("Unauthorized");
+    }
+  })
   .use(html())
   .decorate("db", new EventsDatabase())
   .get("/events", ({ db }) => db.getEvents())

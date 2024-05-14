@@ -4,6 +4,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.server
+    environment:
+      - BEARER_TOKEN=icVGegYNZ6PMe23g5jNS4dDaQiRhoCTwuzpUfnxjTRPmFFbf6UZLTmeWhvWo9KJpUpoN8239kDhacuRj
     volumes:
       - .:/app
     ports:
@@ -15,6 +17,10 @@ services:
       args:
         USERNAME: gordo
         PASSWORD: FCkzTVRe4ETcB9fxrxVM5MSnuM3YizyE4x9uAbQC
+    environment:
+      - BEARER_TOKEN=icVGegYNZ6PMe23g5jNS4dDaQiRhoCTwuzpUfnxjTRPmFFbf6UZLTmeWhvWo9KJpUpoN8239kDhacuRj
+    depends_on:
+      - server
     ports:
       - "80:80"
     volumes:

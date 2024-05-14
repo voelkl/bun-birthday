@@ -58,6 +58,7 @@ export default {
           headers: {
             "Access-Control-Allow-Origin": "*",
             "Content-Type": "application/json",
+            "Authorization": "Bearer 12345678",
           },
           body: JSON.stringify(event),
         })

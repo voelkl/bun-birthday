@@ -111,6 +111,7 @@ export default {
           headers: {
             "Access-Control-Allow-Origin": "*",
             "Content-Type": "application/json",
+            "Authorization": "Bearer 12345678"
           },
           body: JSON.stringify({
             title: event.title,
@@ -135,6 +136,7 @@ export default {
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, DELETE",
+          "Authorization": "Bearer 12345678"
         },
       })
         .then((res) => res.json())

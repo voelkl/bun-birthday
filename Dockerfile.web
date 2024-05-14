@@ -8,6 +8,7 @@ RUN apk add --no-cache apache2-utils
 # These can be overridden when building the image
 ARG USERNAME=admin
 ARG PASSWORD=password
+ARG BEARER_TOKEN=token
 
 # Generate the .htpasswd file
 RUN htpasswd -cb /etc/nginx/.htpasswd $USERNAME $PASSWORD

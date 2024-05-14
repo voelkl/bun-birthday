@@ -83,7 +83,8 @@ export default {
         method: "GET",
         headers: {
           "Access-Control-Allow-Origin": "*",
-        },
+          "Authorization": "Bearer 12345678"
+        }
       })
         .then((res) => res.json())
         .then((events) => {
