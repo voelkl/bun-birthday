@@ -53,12 +53,12 @@ export default {
   methods: {
     addNewEvent(event) {
       if (event.title && event.date) {
-        fetch("http://server:4000/events", {
+        fetch("http://localhost:4000/events", {
           method: "POST",
           headers: {
             "Access-Control-Allow-Origin": "*",
             "Content-Type": "application/json",
-            "Authorization": "Bearer 12345678",
+            "Authorization": "Bearer 7GX43WAWJAKXZS8DSETPA8HN5G6VQ5LKP54SCPBN",
           },
           body: JSON.stringify(event),
         })

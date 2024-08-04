@@ -1,8 +1,7 @@
 FROM oven/bun:latest
 
 COPY ./ ./
-RUN bun install --production
-RUN bun add vite
+RUN bun install
 
 # run the app
 EXPOSE 4000/tcp

@@ -13,7 +13,7 @@ new Elysia()
   ))
   .use(bearer()).onBeforeHandle(async ({ bearer }) => {
     if (!bearer) throw new Error("Unauthorized");
-    const isAuthorized = bearer === "12345678";
+    const isAuthorized = bearer === "7GX43WAWJAKXZS8DSETPA8HN5G6VQ5LKP54SCPBN";
     if (!isAuthorized) {
       throw new Error("Unauthorized");
     }

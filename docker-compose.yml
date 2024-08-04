@@ -10,6 +10,8 @@ services:
       - .:/app
     ports:
       - 4000:4000
+    networks:
+      - app-network
   web:
     build:
       context: .
@@ -26,7 +28,11 @@ services:
     volumes:
       - ./certs:/etc/letsencrypt
       - ./certbot-data:/data/letsencrypt
-
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge
   #certbot:
   #  image: certbot/certbot
   #  volumes:
