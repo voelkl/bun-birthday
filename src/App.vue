@@ -79,7 +79,7 @@ export default {
   },
   methods: {
     fetchEvents() {
-      fetch("http://localhost:4000/events", {
+      fetch("http://web:4000/events", {
         method: "GET",
         headers: {
           "Access-Control-Allow-Origin": "*",
