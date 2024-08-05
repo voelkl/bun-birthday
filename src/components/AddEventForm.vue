@@ -53,7 +53,7 @@ export default {
   methods: {
     addNewEvent(event) {
       if (event.title && event.date) {
-        fetch("http://web:4000/events", {
+        fetch("http://0.0.0.0:4000/events", {
           method: "POST",
           headers: {
             "Access-Control-Allow-Origin": "*",

@@ -22,8 +22,7 @@ export default {
   },
   methods: {
     onSubmit() {
-      // Make a call to the backend for login
-      fetch('http://server:4000/sign', {
+      fetch('http://0.0.0.0:4000/sign', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

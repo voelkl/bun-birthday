@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-  server:
+  backend:
     build:
       context: .
       dockerfile: Dockerfile.server
@@ -9,9 +9,7 @@ services:
     volumes:
       - .:/app
     ports:
-      - 4000:4000
-    networks:
-      - app-network
+      - "4000:4000"
   frontend:
     build:
       context: .
@@ -19,25 +17,13 @@ services:
       args:
         USERNAME: gordo
         PASSWORD: FCkzTVRe4ETcB9fxrxVM5MSnuM3YizyE4x9uAbQC
-    environment:
-      - BEARER_TOKEN=icVGegYNZ6PMe23g5jNS4dDaQiRhoCTwuzpUfnxjTRPmFFbf6UZLTmeWhvWo9KJpUpoN8239kDhacuRj
+    env_file:
+      - .env
     depends_on:
-      - server
+      - backend
     ports:
       - "80:80"
     volumes:
       - ./certs:/etc/letsencrypt
       - ./certbot-data:/data/letsencrypt
-    networks:
-      - app-network
-networks:
-  app-network:
-    driver: bridge
-  #certbot:
-  #  image: certbot/certbot
-  #  volumes:
-  #    - ./certs:/etc/letsencrypt
-  #    - ./certbot-data:/data/letsencrypt
-  #  depends_on:
-  #    - web
-  #  entrypoint: /bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'
+

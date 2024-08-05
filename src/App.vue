@@ -45,6 +45,7 @@
   </div>
 </template>
 <script>
+
 import Modal from "./components/Modal.vue";
 import AddEventForm from "./components/AddEventForm.vue";
 import EventsList from "./components/EventsList.vue";
@@ -79,7 +80,9 @@ export default {
   },
   methods: {
     fetchEvents() {
-      fetch("http://web:4000/events", {
+      console.log("Fetching events");
+      console.log(process.env)
+      fetch("http://0.0.0.0:4000/events", {
         method: "GET",
         headers: {
           "Access-Control-Allow-Origin": "*",
