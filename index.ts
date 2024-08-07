@@ -20,7 +20,10 @@ new Elysia()
   })
   .use(html())
   .decorate("db", new EventsDatabase())
-  .get("/events", ({ db }) => db.getEvents())
+  .get("/events", ({ db }) => {
+    console.log(process.env)
+    return db.getEvents()}
+  )
   .get("/event/:id", ({ db, params }) => db.getEvent(parseInt(params.id)))
   .post(
     "/events",

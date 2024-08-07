@@ -9,6 +9,7 @@ RUN apk add --no-cache apache2-utils
 ARG USERNAME=admin
 ARG PASSWORD=password
 ARG BEARER_TOKEN=token
+ARG BACKEND_API_URL
 
 # Generate the .htpasswd file
 RUN htpasswd -cb /etc/nginx/.htpasswd $USERNAME $PASSWORD

@@ -80,9 +80,7 @@ export default {
   },
   methods: {
     fetchEvents() {
-      console.log("Fetching events");
-      console.log(process.env)
-      fetch("http://0.0.0.0:4000/events", {
+      fetch("/api/events", {
         method: "GET",
         headers: {
           "Access-Control-Allow-Origin": "*",

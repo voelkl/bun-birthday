@@ -106,7 +106,7 @@ export default {
   methods: {
     editEvent(event) {
       if (event.title && event.date) {
-        fetch(`http://0.0.0.0:4000/events/${event.id}`, {
+        fetch(`/api/events/${event.id}`, {
           method: "PUT",
           headers: {
             "Access-Control-Allow-Origin": "*",

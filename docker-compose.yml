@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile.server
     environment:
-      - BEARER_TOKEN=icVGegYNZ6PMe23g5jNS4dDaQiRhoCTwuzpUfnxjTRPmFFbf6UZLTmeWhvWo9KJpUpoN8239kDhacuRj
+      - BEARER_TOKEN=7GX43WAWJAKXZS8DSETPA8HN5G6VQ5LKP54SCPBN
     volumes:
       - .:/app
     ports:
@@ -17,8 +17,10 @@ services:
       args:
         USERNAME: gordo
         PASSWORD: FCkzTVRe4ETcB9fxrxVM5MSnuM3YizyE4x9uAbQC
-    env_file:
-      - .env
+        BACKEND_API_URL: http://backend:4000
+    environment:
+      - BEARER_TOKEN=7GX43WAWJAKXZS8DSETPA8HN5G6VQ5LKP54SCPBN
+      - BACKEND_API_URL=http://backend:4000
     depends_on:
       - backend
     ports:
