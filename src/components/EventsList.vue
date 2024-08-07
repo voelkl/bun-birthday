@@ -106,12 +106,12 @@ export default {
   methods: {
     editEvent(event) {
       if (event.title && event.date) {
-        fetch(`:4000/events/${event.id}`, {
+        fetch(`${process.env.VUE_APP_API_URL}/events/${event.id}`, {
           method: "PUT",
           headers: {
             "Access-Control-Allow-Origin": "*",
             "Content-Type": "application/json",
-            "Authorization": "Bearer 7GX43WAWJAKXZS8DSETPA8HN5G6VQ5LKP54SCPBN"
+            "Authorization": "Bearer "
           },
           body: JSON.stringify({
             title: event.title,
@@ -131,12 +131,12 @@ export default {
       }
     },
     deleteEvent(event) {
-      fetch(`:4000/events/${event.id}`, {
+      fetch(`${process.env.VUE_APP_API_URL}/events/${event.id}`, {
         method: "DELETE",
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, DELETE",
-          "Authorization": "Bearer 7GX43WAWJAKXZS8DSETPA8HN5G6VQ5LKP54SCPBN"
+          "Authorization": `Bearer ${process.env.BEARER_TOKEN}`
         },
       })
         .then((res) => res.json())

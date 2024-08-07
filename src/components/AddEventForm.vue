@@ -53,12 +53,12 @@ export default {
   methods: {
     addNewEvent(event) {
       if (event.title && event.date) {
-        fetch(":4000/events", {
+        fetch(`${process.env.VUE_APP_API_URL}/events`, {
           method: "POST",
           headers: {
             "Access-Control-Allow-Origin": "*",
             "Content-Type": "application/json",
-            "Authorization": "Bearer 7GX43WAWJAKXZS8DSETPA8HN5G6VQ5LKP54SCPBN",
+            "Authorization": `Bearer ${process.env.BEARER_TOKEN}`,
           },
           body: JSON.stringify(event),
         })

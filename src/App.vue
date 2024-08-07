@@ -80,11 +80,11 @@ export default {
   },
   methods: {
     fetchEvents() {
-      fetch(":4000/events", {
+      fetch(`${process.env.VUE_APP_API_URL}/events`, {
         method: "GET",
         headers: {
           "Access-Control-Allow-Origin": "*",
-          "Authorization": "Bearer 7GX43WAWJAKXZS8DSETPA8HN5G6VQ5LKP54SCPBN"
+          "Authorization": `Bearer ${process.env.BEARER_TOKEN}`,
         }
       })
         .then((res) => res.json())

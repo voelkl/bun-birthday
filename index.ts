@@ -21,7 +21,6 @@ new Elysia()
   .use(html())
   .decorate("db", new EventsDatabase())
   .get("/events", ({ db }) => {
-    console.log(process.env)
     return db.getEvents()}
   )
   .get("/event/:id", ({ db, params }) => db.getEvent(parseInt(params.id)))
@@ -68,4 +67,4 @@ new Elysia()
       return { success: false };
     }
   })
-  .listen({port: 4000, host: '0.0.0.0'});
+  .listen({port: 4000});
