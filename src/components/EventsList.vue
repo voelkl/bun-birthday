@@ -111,7 +111,7 @@ export default {
           headers: {
             "Access-Control-Allow-Origin": "*",
             "Content-Type": "application/json",
-            "Authorization": "Bearer "
+            "Authorization": `Bearer ${process.env.BEARER_TOKEN}`,
           },
           body: JSON.stringify({
             title: event.title,
