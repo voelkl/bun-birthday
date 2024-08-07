@@ -80,7 +80,7 @@ export default {
   },
   methods: {
     fetchEvents() {
-      fetch("/api/events", {
+      fetch(":4000/events", {
         method: "GET",
         headers: {
           "Access-Control-Allow-Origin": "*",
